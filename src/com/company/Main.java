@@ -15,4 +15,7 @@ public class Main {
 
 
     }
+
+    public static void test(int i, int i1, int i2, int i3, String lal, int i4) {
+    }
 }
