@@ -6,15 +6,16 @@ public class ExerciseFile2 {
 
     public static void main(String[] args) {
 
-        File file = new File("nazwaPliku.txt");
-        InputStream inS;
-        OutputStream outS;
+      //  File file = new File("nazwaPliku.txt");
+       // InputStream inS;
+      //  OutputStream outS;
 
         //Reader reader;
         Writer writer = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(file));
+       //     writer = new BufferedWriter(new FileWriter(file));
+
 
             writer.write("lala");
 
@@ -49,7 +50,7 @@ public class ExerciseFile2 {
             BufferedWriter writer1 = new BufferedWriter(new FileWriter("baza.txt"));
 
             System.out.println( reader.read());
-            String tresc = "";
+            String tresc;
             while((tresc = reader.readLine()) != null){
                 System.out.println(tresc);
                 writer1.write(tresc);
@@ -66,13 +67,13 @@ public class ExerciseFile2 {
         }
         ExerciseFile2 test1 = new ExerciseFile2();
 
-        test1.test(1,2,3,125,"lal",40);
+        test(1,2,3,125,"lal",40);
     }
 
     static void test(Object... a){
 
         for (Object b:a) {
-            //System.out.println(b);
+            System.out.println(b);
         }
     }
 }
