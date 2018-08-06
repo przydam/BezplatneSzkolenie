@@ -3,6 +3,8 @@ package Serializacja;
 
 
 import java.io.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Exercise1 {
 
@@ -18,13 +20,13 @@ public class Exercise1 {
 
 
         try {
-            ObjectOutputStream outS = new ObjectOutputStream(new FileOutputStream("BazaSerializacja.txt"));
+            ObjectOutputStream outS = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("BazaSerializacja.txt")));
             outS.writeObject(towary);
 
             outS.close();
             
             
-            ObjectInputStream inS = new ObjectInputStream(new FileInputStream("BazaSerializacja.txt"));
+            ObjectInputStream inS = new ObjectInputStream(new GZIPInputStream(new FileInputStream("BazaSerializacja.txt")));
             Towar[] a = (Towar[])inS.readObject();
             inS.close();
 
