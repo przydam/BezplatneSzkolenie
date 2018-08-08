@@ -1,5 +1,7 @@
 package Kropelka;
 
+import org.omg.PortableServer.ThreadPolicyOperations;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,8 +31,25 @@ public class Main extends JFrame {
         });
 
 
+        JButton usunButton = (JButton)panelButton.add(new JButton("Usuń"));
+
+        usunButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelAnimacji.stop();
+
+            }
+
+
+        });
+
+
+
 
     }
+
+
+
     private JPanel panelButton = new JPanel();
     private PanelAnimacji panelAnimacji = new PanelAnimacji();
     private void startAnimation() {
@@ -45,29 +64,34 @@ public class Main extends JFrame {
 
 
 class PanelAnimacji extends JPanel{
+    Thread watek;
+    ThreadGroup grupaWatkow = new ThreadGroup("Grupa Kropelek");
+
+
 
 
 
     public void addKropelka() {
         listaKropelek.add(new Kropelka());
+        watek = new Thread(grupaWatkow, new KropelkaRunnable((Kropelka)listaKropelek.get(listaKropelek.size()-1)));
 
-        for(int i = 0; i<500; i++){
-            for(int j = 0; j< listaKropelek.size(); j++){
-                ((Kropelka)listaKropelek.get(j)).ruszKropelka(this);
+        watek.start();
 
+        grupaWatkow.list();
 
-
-            this.paint(this.getGraphics());
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-            }
-        }
 
 
     }
+
+
+    public void stop(){
+
+        //watek.interrupt();
+        grupaWatkow.interrupt();
+
+    }
+
+
     @Override
     public void paintComponent(Graphics g){
     super.paintComponent(g);
@@ -81,6 +105,57 @@ class PanelAnimacji extends JPanel{
     }
 
     ArrayList listaKropelek = new ArrayList();
+    JPanel ten = this;
+    public class KropelkaRunnable implements Runnable{
+
+
+        KropelkaRunnable(Kropelka kropelka){
+
+        this.kropelka = kropelka;
+
+
+
+        }
+
+        public KropelkaRunnable() {
+
+        }
+
+
+        @Override
+        public void run() {
+            try{
+            while(!Thread.currentThread().isInterrupted()){
+
+
+
+
+                this.kropelka.ruszKropelka(ten);
+                repaint();
+
+
+
+
+
+
+                    Thread.sleep(1);
+
+
+
+
+            }
+
+            } catch (InterruptedException e) {
+                listaKropelek.clear();
+                repaint();
+            }
+
+        }
+
+
+        Kropelka kropelka;
+    }
+
 }
 }
 class Kropelka{
