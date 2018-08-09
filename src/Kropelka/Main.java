@@ -23,7 +23,7 @@ public class Main extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startAnimation();
+                panelAnimacji.startAnimation();
 
             }
 
@@ -31,12 +31,26 @@ public class Main extends JFrame {
         });
 
 
-        JButton usunButton = (JButton)panelButton.add(new JButton("Usuń"));
+        JButton stopButton = (JButton)panelButton.add(new JButton("Stop"));
 
-        usunButton.addActionListener(new ActionListener() {
+        stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panelAnimacji.stop();
+                panelAnimacji.stopAnimation();
+
+            }
+
+
+        });
+
+
+
+        JButton dodajButton = (JButton)panelButton.add(new JButton("Dodaj"));
+
+        dodajButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelAnimacji.dodajAnimation();
 
             }
 
@@ -52,11 +66,7 @@ public class Main extends JFrame {
 
     private JPanel panelButton = new JPanel();
     private PanelAnimacji panelAnimacji = new PanelAnimacji();
-    private void startAnimation() {
 
-
-        panelAnimacji.addKropelka();
-    }
 
     public static void main(String[] args) {
         new Main().setVisible(true);
@@ -64,6 +74,9 @@ public class Main extends JFrame {
 
 
 class PanelAnimacji extends JPanel{
+
+        private volatile boolean zatrzymany = false;
+        private Object lock = new Object();
     Thread watek;
     ThreadGroup grupaWatkow = new ThreadGroup("Grupa Kropelek");
 
@@ -84,10 +97,11 @@ class PanelAnimacji extends JPanel{
     }
 
 
-    public void stop(){
+    public void stopAnimation(){
 
         //watek.interrupt();
-        grupaWatkow.interrupt();
+       // grupaWatkow.interrupt();
+        zatrzymany = true;
 
     }
 
@@ -106,6 +120,24 @@ class PanelAnimacji extends JPanel{
 
     ArrayList listaKropelek = new ArrayList();
     JPanel ten = this;
+
+    public void dodajAnimation() {
+
+
+        panelAnimacji.addKropelka();
+    }
+
+    public void startAnimation() {
+
+        if(zatrzymany){
+            zatrzymany = false;
+            synchronized (lock){
+                lock.notifyAll();
+            }
+        }
+
+    }
+
     public class KropelkaRunnable implements Runnable{
 
 
@@ -124,31 +156,38 @@ class PanelAnimacji extends JPanel{
 
         @Override
         public void run() {
-            try{
-            while(!Thread.currentThread().isInterrupted()){
 
 
 
+
+
+while(true){
+synchronized (lock){
+    while(zatrzymany){
+        try{
+            lock.wait();
+        }catch (InterruptedException ex){
+            System.out.println(ex.getMessage());
+
+        }
+
+    }
+}
 
                 this.kropelka.ruszKropelka(ten);
                 repaint();
 
 
+    try {
+        Thread.sleep(10);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
 
 
+}
 
 
-                    Thread.sleep(1);
-
-
-
-
-            }
-
-            } catch (InterruptedException e) {
-                listaKropelek.clear();
-                repaint();
-            }
 
         }
 
