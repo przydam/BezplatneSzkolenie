@@ -68,6 +68,12 @@ public class Main {
         }
        // System.out.println("Czas wykonania: " + totalMili);
         System.out.println("Wczytanych słów: " +set.size());
+
+
+
+
+
+
     }
 }
 class Element implements Comparable{

@@ -1,9 +1,6 @@
 package LinkedList;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -54,7 +51,34 @@ public class Main {
         }
 
 
+        Stack<String> stos = new Stack<String>();
+        stos.push("lala1");
+        stos.push("lala2");
+        stos.push("lala3");
+        stos.push("lala4");
 
+        System.out.println(stos.pop());
+        System.out.println(stos.pop());
+        System.out.println(stos.pop());
+        System.out.println(stos.pop());
+
+        String nazwa = stos.peek();
+
+        if (nazwa.equals("lala1")){
+            System.out.println(stos.pop());
+        }else{
+            System.out.println("nie ma takiego na samej gorze");
+        }
+
+
+        //  System.out.println( stos.pop());
+        Vector<String> wektor = new Vector<String>();
+        wektor.add("lalala");
+        wektor.get(0);
+
+        HashMap a;
+
+        Hashtable b;
 
 
 
